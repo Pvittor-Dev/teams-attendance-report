@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Painel de Presença</title>
+<style>
+:root{--bg:#f3f5f9;--card:#fff;--tx:#18202b;--mu:#667386;--bd:#e3e8f0;--ac:#0b7abf;--red:#d51f36;--ok:#2f9e6b;--no:#d9534f;--wa:#e0a030;--sh:0 1px 2px rgba(20,30,50,.06),0 4px 14px rgba(20,30,50,.05)}
+@media (prefers-color-scheme:dark){:root{--bg:#0f141b;--card:#171f29;--tx:#e8edf4;--mu:#8d99aa;--bd:#263140;--ac:#3fa2e6;--red:#ef5468;--ok:#3fbf86;--no:#ef6f6b;--wa:#e8b04a;--sh:none}}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--tx);font:14px/1.45 system-ui,"Segoe UI",sans-serif}
+header{background:var(--card);border-bottom:1px solid var(--bd);position:relative}
+header::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:3px;background:linear-gradient(90deg,var(--ac),#2fb5a0)}
+.hd{max-width:1320px;margin:auto;padding:14px 24px;display:flex;align-items:center;gap:18px;flex-wrap:wrap}
+.hd img{height:40px;display:block}.hd img[src='']{display:none}.hd .t{flex:1;min-width:220px}.hd h1{margin:0;font-size:20px}.hd p{margin:0;color:var(--mu);font-size:13px}
+.ctl{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.seg{display:inline-flex;border:1px solid var(--bd);border-radius:8px;overflow:hidden}
+.seg button{border:0;background:transparent;color:var(--mu);padding:6px 12px;font:inherit;cursor:pointer}
+.seg button.on{background:var(--ac);color:#fff}.seg button:hover:not(.on){background:var(--bg)}
+input,select,.btn{background:var(--card);color:var(--tx);border:1px solid var(--bd);border-radius:8px;padding:6px 10px;font:inherit}
+.btn{cursor:pointer}.btn:hover{border-color:var(--ac);color:var(--ac)}
+main{max-width:1320px;margin:auto;padding:18px 24px 48px;display:grid;gap:16px}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:16px;box-shadow:var(--sh)}
+h2{margin:0 0 12px;font-size:14px;display:flex;justify-content:space-between;align-items:center;gap:8px}
+h2 small{color:var(--mu);font-weight:400;font-size:12px}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(165px,1fr));gap:12px}
+.kpi{border-top:3px solid var(--ac)}.kpi.r{border-top-color:var(--red)}.kpi.g{border-top-color:var(--ok)}
+.kpi span{color:var(--mu);font-size:11px;text-transform:uppercase;letter-spacing:.05em}
+.kpi b{display:block;font-size:28px;line-height:1.2;margin-top:2px;font-variant-numeric:tabular-nums}
+.kpi em{font-style:normal;font-size:12px;color:var(--mu)}.up{color:var(--ok)!important}.dn{color:var(--no)!important}
+.g2{display:grid;grid-template-columns:3fr 2fr;gap:16px}.g3{display:grid;grid-template-columns:3fr 2fr;gap:16px}
+@media(max-width:980px){.g2,.g3{grid-template-columns:1fr}}
+.rank{display:grid;grid-template-columns:minmax(120px,1.4fr) 3fr 46px;gap:8px;align-items:center;padding:5px 6px;border-radius:8px;cursor:pointer}
+.rank:hover,.rank.sel{background:var(--bg)}.nm{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.nm small{color:var(--mu)}
+.bar{height:10px;background:var(--bd);border-radius:6px;overflow:hidden}.bar i{display:block;height:100%;border-radius:6px;animation:w .7s ease-out both}
+@keyframes w{from{width:0}}@keyframes g{from{transform:scaleY(0)}}
+.pc{text-align:right;font-variant-numeric:tabular-nums;color:var(--mu)}
+.scroll{overflow:auto;max-height:480px}.tb{display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap}.tb input{flex:1;min-width:120px}
+svg text{fill:var(--mu);font-size:11px}.bb{transform-box:fill-box;transform-origin:bottom;animation:g .6s ease-out both;cursor:pointer;transition:opacity .15s}
+.bb:hover{opacity:.75}.bsel{stroke:var(--tx);stroke-width:2}
+.chip{display:inline-block;padding:1px 8px;border-radius:99px;font-size:11px;background:var(--bg);color:var(--mu);margin-left:6px}
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:12px}.cols h3{font-size:12px;margin:0 0 6px;text-transform:uppercase;letter-spacing:.04em}
+.cols ul{list-style:none;margin:0;padding:0;max-height:300px;overflow:auto}.cols li{padding:3px 0;border-bottom:1px solid var(--bd);display:flex;justify-content:space-between;gap:8px}
+.cols li span{color:var(--mu);font-variant-numeric:tabular-nums}.cols li span:last-child{white-space:nowrap}
+table{border-collapse:separate;border-spacing:2px;font-size:12px}th{font-weight:500;color:var(--mu);position:sticky;top:0;background:var(--card);cursor:pointer}
+th:hover{color:var(--ac)}th.hs{color:var(--ac);font-weight:700}
+td.n{position:sticky;left:0;background:var(--card);padding-right:10px;white-space:nowrap;max-width:230px;overflow:hidden;text-overflow:ellipsis;cursor:pointer}
+td.c{width:22px;height:22px;border-radius:4px}.P{background:var(--ok)}.F{background:var(--no);opacity:.5}
+.leg{color:var(--mu);font-size:12px;margin-top:8px}.leg i{display:inline-block;width:10px;height:10px;border-radius:2px;margin:0 4px 0 12px}
+.alerts{margin:0;padding:0;list-style:none}.alerts li{padding:6px 10px;border-left:3px solid var(--no);background:var(--bg);border-radius:6px;margin-bottom:6px}.alerts li.w{border-color:var(--wa)}
+.empty{color:var(--mu)}a.l{color:var(--ac);cursor:pointer}
+@media print{body{background:#fff}.ctl,.tb,.btn,.noprint{display:none!important}.scroll,.cols ul{max-height:none!important;overflow:visible!important}.card{break-inside:avoid;box-shadow:none}main{padding:8px 0}.g2,.g3{grid-template-columns:1fr 1fr}.bb,.bar i{animation:none}}
+.um .gchart,.um #mapaCard,.um .kpi.x{display:none}.um .g2{grid-template-columns:1fr}.um #per,.um .ctl .seg{display:none}
+@page{size:A4 landscape;margin:9mm}
+</style>
+</head>
+<body>
+<header><div class="hd">
+  <img src="__LOGO__" alt="">
+  <div class="t"><h1 id="tit">Presença da reunião diária</h1><p id="sub"></p></div>
+  <div class="ctl">
+    <div class="seg" id="per"><button data-p="7">7 dias</button><button data-p="14">14 dias</button><button data-p="30">30 dias</button><button data-p="0" class="on">Tudo</button></div>
+    <select id="eq" title="Equipe"></select>
+    <button class="btn" id="csv">⬇ CSV</button><button class="btn" id="prt">🖨 Imprimir</button>
+  </div>
+</div></header>
+<main>
+  <div class="kpis" id="kpis"></div>
+  <div class="g2">
+    <div class="card gchart"><h2>Presentes por dia <small>clique numa barra para ver quem veio</small></h2><div id="chart"></div></div>
+    <div class="card"><h2 id="dtit">Dia</h2><div id="dia"></div></div>
+  </div>
+  <div class="g3">
+    <div class="card"><h2>Ranking de frequência <small id="rc"></small></h2>
+      <div class="tb"><input id="q" placeholder="Buscar nome..."><select id="ord"><option value="desc">Maior presença</option><option value="asc">Menor presença</option><option value="az">A–Z</option></select></div>
+      <div class="scroll" id="rank"></div></div>
+    <div class="card"><h2 id="atit">Pontos de atenção</h2><div id="aten"></div></div>
+  </div>
+  <div class="card" id="mapaCard"><h2>Mapa de chamada <small>clique no nome ou na data</small></h2><div class="scroll" id="mapa"></div>
+    <div class="leg"><i class="P"></i>Presente<i class="F"></i>Ausente</div></div>
+</main>
+<script>
+const D=__DADOS__;
+const $=id=>document.getElementById(id),fmt=s=>s.slice(8)+'/'+s.slice(5,7);
+const nm=p=>(p.cod?p.cod+' · ':'')+p.nome;
+const S={per:0,eq:'',dia:null,pes:null};
+const cor=p=>p>=85?'var(--ok)':p>=60?'var(--wa)':'var(--no)';
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+let V; // visão atual
+
+function visao(){
+  const datas=S.per?D.datas.slice(-S.per):D.datas.slice();
+  const base=D.pessoas.filter(p=>!S.eq||p.equipe===S.eq);
+  const pes=base.map(p=>{const pr=datas.filter(d=>p.dias[d]).length,mins=datas.filter(d=>p.dias[d]).map(d=>p.dias[d].min);
+    let sf=0;for(let i=datas.length-1;i>=0&&!p.dias[datas[i]];i--)sf++;
+    return {...p,pr,tot:datas.length,pct:datas.length?Math.round(1000*pr/datas.length)/10:0,mm:pr?Math.round(10*mins.reduce((a,b)=>a+b,0)/pr)/10:0,sf}});
+  const esp=pes.filter(p=>p.esperado);const ref=esp.length?esp:pes;
+  const pd=datas.map(d=>({d,n:ref.filter(p=>p.dias[d]).length}));
+  return {datas,pes,ref,pd,tot:ref.length};
+}
+
+function kpis(){
+  const {datas,ref,pd,tot}=V,N=datas.length,med=ref.length?ref.reduce((a,p)=>a+p.pct,0)/ref.length:0;
+  let tr='';if(N>=6){const k=Math.min(5,Math.floor(N/2)),f=a=>a.reduce((x,y)=>x+y.n,0)/a.length,u=f(pd.slice(-k)),a=f(pd.slice(-2*k,-k)),df=tot?(u-a)/tot*100:0;
+    tr=`<em class="${df>=0?'up':'dn'}">${df>=0?'▲':'▼'} ${Math.abs(df).toFixed(1)} pp vs. ${k} dias antes</em>`}
+  const ult=pd[N-1],mel=pd.reduce((a,b)=>b.n>a.n?b:a),pio=pd.reduce((a,b)=>b.n<a.n?b:a);
+  document.body.classList.toggle('um',N===1);
+  const itens=[['Reuniões',N,'','x'],['Pessoas',V.pes.length,'',''],['Frequência média',med.toFixed(1)+'%',tr,med>=85?'g':med<60?'r':''],
+   ['Presentes na última',`${ult.n}<small style="font-size:15px;color:var(--mu)"> / ${tot}</small>`,`<em>${fmt(ult.d)}</em>`,''],
+   ['Melhor dia',fmt(mel.d),`<em>${mel.n} presentes</em>`,'g x'.replace(' x',N===1?' x':'')],['Pior dia',fmt(pio.d),`<em>${pio.n} presentes</em>`,'r'+(N===1?' x':'')]];
+  $('kpis').innerHTML=itens.map(([l,v,e,c])=>`<div class="card kpi ${c}"><span>${l}</span><b>${v}</b>${e}</div>`).join('');
+}
+
+function chart(){
+  const {datas,pd,tot}=V,N=datas.length,W=Math.max(520,N*30+50),H=230,m={l:30,b:28,t:14},mx=Math.max(...pd.map(x=>x.n),tot,1),bw=(W-m.l)/N,T=Math.min(4,mx);
+  let s=`<svg viewBox="0 0 ${W} ${H}" width="100%" style="max-height:270px">`;
+  for(let i=0;i<=T;i++){const y=H-m.b-(H-m.b-m.t)*i/T;s+=`<line x1="${m.l}" x2="${W}" y1="${y}" y2="${y}" stroke="var(--bd)"/><text x="${m.l-6}" y="${y+4}" text-anchor="end">${Math.round(mx*i/T)}</text>`}
+  pd.forEach((x,i)=>{const h=(H-m.b-m.t)*x.n/mx,xx=m.l+i*bw+bw*.14,p=tot?x.n/tot*100:0;
+    s+=`<rect class="bb ${S.dia===x.d?'bsel':''}" data-d="${x.d}" style="animation-delay:${i*25}ms" x="${xx}" y="${H-m.b-h}" width="${bw*.72}" height="${Math.max(h,1)}" rx="3" fill="${cor(p)}"><title>${fmt(x.d)}: ${x.n} presentes (${p.toFixed(0)}%)</title></rect>`;
+    if(N<=35)s+=`<text x="${xx+bw*.36}" y="${H-m.b-h-4}" text-anchor="middle">${x.n}</text>`;
+    if(N<=18||i%Math.ceil(N/18)==0)s+=`<text x="${xx+bw*.36}" y="${H-10}" text-anchor="middle">${fmt(x.d)}</text>`});
+  if(tot){const y=H-m.b-(H-m.b-m.t)*tot/mx;s+=`<line x1="${m.l}" x2="${W}" y1="${y}" y2="${y}" stroke="var(--tx)" stroke-opacity=".35" stroke-dasharray="5 4"/><text x="${W-4}" y="${y-4}" text-anchor="end">esperados: ${tot}</text>`}
+  $('chart').innerHTML=s+'</svg>';
+}
+
+function dia(){
+  const {datas,pes}=V;if(!S.dia||!datas.includes(S.dia))S.dia=datas[datas.length-1];
+  const d=S.dia,pr=pes.filter(p=>p.dias[d]).sort((a,b)=>(a.dias[d].ent||'').localeCompare(b.dias[d].ent||'')),au=pes.filter(p=>!p.dias[d]&&p.esperado!==false).sort((a,b)=>a.nome.localeCompare(b.nome));
+  const nE=pr.filter(p=>p.esperado!==false).length,xE=pr.length-nE;
+  $('dtit').innerHTML=`<span>Quem veio em ${fmt(d)}</span><span><span class="chip">${nE} presentes</span><span class="chip">${au.length} ausentes</span>${xE?`<span class="chip">+${xE} fora da lista</span>`:''}</span>`;
+  $('dia').innerHTML=`<div class="cols"><div><h3 style="color:var(--ok)">Presentes</h3><ul>${pr.map(p=>`<li><span style="color:var(--tx)">${esc(nm(p))}${p.esperado===false?' <small style="color:var(--mu)">(fora da lista)</small>':''}</span><span>${p.dias[d].ent||''} · ${p.dias[d].min} min</span></li>`).join('')||'<li class="empty">Ninguém</li>'}</ul></div>
+  <div><h3 style="color:var(--no)">Ausentes</h3><ul>${au.map(p=>`<li><span style="color:var(--tx)">${esc(nm(p))}</span><span>${p.pct}%</span></li>`).join('')||'<li class="empty">Ninguém faltou 🎉</li>'}</ul></div></div>`;
+}
+
+function rank(){
+  const q=$('q').value.toLowerCase(),o=$('ord').value;
+  let l=V.pes.filter(p=>nm(p).toLowerCase().includes(q));
+  l.sort(o=='az'?(a,b)=>a.nome.localeCompare(b.nome):o=='asc'?(a,b)=>a.pct-b.pct||a.nome.localeCompare(b.nome):(a,b)=>b.pct-a.pct||a.nome.localeCompare(b.nome));
+  $('rc').textContent=l.length+' pessoas';
+  $('rank').innerHTML=l.map(p=>`<div class="rank ${S.pes===p.nome?'sel':''}" data-n="${esc(p.nome)}"><span class="nm" title="${esc(nm(p))}">${esc(nm(p))}${p.esperado?'':' <small>(extra)</small>'}</span>
+   <div class="bar"><i style="width:${p.pct}%;background:${cor(p.pct)}"></i></div><span class="pc">${p.pct}%</span></div>`).join('')||'<p class="empty">Ninguém encontrado.</p>';
+}
+
+function atencao(){
+  const {datas,pes,pd,tot}=V,p0=S.pes&&pes.find(p=>p.nome===S.pes);
+  if(p0){
+    $('atit').innerHTML=`<span>${esc(nm(p0))}</span><a class="l noprint" id="vt" style="font-size:12px;font-weight:400">← pontos de atenção</a>`;
+    $('aten').innerHTML=`<p style="margin-top:0;color:var(--mu)">${p0.email?esc(p0.email)+' · ':''}${p0.equipe?esc(p0.equipe):''}</p>
+     <p><b>${p0.pr}/${p0.tot}</b> dias (${p0.pct}%) · média <b>${p0.mm}</b> min · entrada média <b>${p0.entrada_media||'—'}</b>${p0.sf?` · <span class="dn"><b>${p0.sf}</b> falta(s) seguida(s)</span>`:''}</p>
+     <div style="display:flex;gap:3px;flex-wrap:wrap;margin:10px 0">${datas.map(d=>`<div class="${p0.dias[d]?'P':'F'}" title="${fmt(d)} · ${p0.dias[d]?p0.dias[d].ent+' ('+p0.dias[d].min+' min)':'ausente'}" style="width:18px;height:26px;border-radius:4px"></div>`).join('')}</div>
+     <div class="scroll" style="max-height:260px"><table><tr><th>Data</th><th>Entrada</th><th>Saída</th><th>Min</th></tr>${datas.slice().reverse().map(d=>{const x=p0.dias[d];return `<tr><td>${fmt(d)}</td>${x?`<td>${x.ent}</td><td>${x.sai}</td><td>${x.min}</td>`:'<td colspan="3" class="dn">ausente</td>'}</tr>`}).join('')}</table></div>`;
+    $('vt').onclick=()=>{S.pes=null;rank();atencao()};return;
+  }
+  $('atit').textContent='Pontos de atenção';
+  const o=[],ref=V.ref;
+  ref.filter(p=>p.sf>=3).sort((a,b)=>b.sf-a.sf).forEach(p=>o.push([`<b>${esc(nm(p))}</b> está há <b>${p.sf}</b> reuniões sem aparecer`,'']));
+  ref.filter(p=>p.sf==2).forEach(p=>o.push([`<b>${esc(nm(p))}</b> faltou às últimas 2 reuniões`,'w']));
+  ref.filter(p=>p.pct<60&&p.sf<2).forEach(p=>o.push([`<b>${esc(nm(p))}</b> está com ${p.pct}% de presença`,'w']));
+  pd.filter(x=>tot&&x.n<tot*.6).slice(-3).forEach(x=>o.push([`Dia <b>${fmt(x.d)}</b> teve só ${x.n} de ${tot} presentes`,'w']));
+  $('aten').innerHTML=o.length?'<ul class="alerts">'+o.slice(0,12).map(([t,c])=>`<li class="${c}">${t}</li>`).join('')+'</ul>'+(o.length>12?`<p class="empty">+ ${o.length-12} outros</p>`:''):'<p class="empty">Nada preocupante neste período. 👏</p>';
+}
+
+function mapa(){
+  const {datas,pes}=V;
+  $('mapa').innerHTML='<table><tr><th></th>'+datas.map(d=>`<th data-d="${d}" class="${S.dia===d?'hs':''}">${fmt(d)}</th>`).join('')+'<th>%</th></tr>'+
+   pes.slice().sort((a,b)=>b.pct-a.pct||a.nome.localeCompare(b.nome)).map(p=>`<tr><td class="n" data-n="${esc(p.nome)}" title="${esc(nm(p))}">${esc(nm(p))}</td>${datas.map(d=>`<td class="c ${p.dias[d]?'P':'F'}" title="${esc(p.nome)} · ${fmt(d)}${p.dias[d]?' · '+p.dias[d].ent+' ('+p.dias[d].min+' min)':' · ausente'}"></td>`).join('')}<td style="color:var(--mu)">${p.pct}%</td></tr>`).join('')+'</table>';
+}
+
+function render(){
+  V=visao();
+  $('sub').textContent=`${V.datas.length} reuniões (${fmt(V.datas[0])} a ${fmt(V.datas[V.datas.length-1])}) · atualizado em ${D.gerado}`;
+  kpis();chart();dia();rank();atencao();mapa();
+}
+
+const eqs=[...new Set(D.pessoas.map(p=>p.equipe).filter(Boolean))].sort();
+if(D.titulo)$('tit').textContent=D.titulo;
+if(eqs.length>1){$('eq').innerHTML='<option value="">Todas as equipes</option>'+eqs.map(e=>`<option>${esc(e)}</option>`).join('')}else $('eq').style.display='none';
+$('eq').onchange=e=>{S.eq=e.target.value;S.pes=null;render()};
+$('per').onclick=e=>{const b=e.target.closest('button');if(!b)return;S.per=+b.dataset.p;[...$('per').children].forEach(x=>x.classList.toggle('on',x===b));render()};
+$('q').oninput=$('ord').onchange=()=>rank();
+$('chart').onclick=e=>{const r=e.target.closest('[data-d]');if(r){S.dia=r.dataset.d;chart();dia();mapa()}};
+$('rank').onclick=e=>{const r=e.target.closest('.rank');if(r){S.pes=S.pes===r.dataset.n?null:r.dataset.n;rank();atencao()}};
+$('mapa').onclick=e=>{const h=e.target.closest('th[data-d]'),n=e.target.closest('td.n');
+  if(h){S.dia=h.dataset.d;chart();dia();mapa()}else if(n){S.pes=n.dataset.n;rank();atencao();$('atit').scrollIntoView({behavior:'smooth',block:'center'})}};
+$('prt').onclick=()=>print();
+$('csv').onclick=()=>{const l=['Cód.;Nome;Equipe;Dias presente;Dias de reunião;% presença;Tempo médio (min);Entrada média',...V.pes.map(p=>[p.cod||'',p.nome,p.equipe||'',p.pr,p.tot,String(p.pct).replace('.',','),String(p.mm).replace('.',','),p.entrada_media||''].join(';'))];
+  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob(['﻿'+l.join('\r\n')],{type:'text/csv'}));a.download='presenca_filtrada.csv';a.click()};
+render();
+</script>
+</body>
+</html>
